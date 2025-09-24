@@ -44,6 +44,7 @@ app.config['ONTOLOGY_API_STATUS_URL'] = app.config['ONTOLOGY_API_STATUS_URL'].st
 app.config['UKV_API_STATUS_URL'] = app.config['UKV_API_STATUS_URL'].strip('/')
 app.config['DATA_PRODUCTS_API_STATUS_URL'] = app.config['DATA_PRODUCTS_API_STATUS_URL'].strip('/')
 app.config['SCFIND_API_STATUS_URL'] = app.config['SCFIND_API_STATUS_URL'].strip('/')
+app.config['SPATIALQUERY_API_STATUS_URL'] = app.config['SPATIALQUERY_API_STATUS_URL'].strip('/')
 
 # LRU Cache implementation with per-item time-to-live (TTL) value
 # with a memoizing callable that saves up to maxsize results based on a Least Frequently Used (LFU) algorithm
@@ -373,6 +374,7 @@ def get_status_data():
     UKV_API = 'ukv_api'
     DATA_PRODUCTS_API = 'data_products_api'
     SCFIND_API = 'scfind_api'
+    SPATIALQUERY_API = 'spatialquery_api'
 
     MYSQL_CONNECTION = 'mysql_connection'
     NEO4J_CONNECTION = 'neo4j_connection'
@@ -380,6 +382,7 @@ def get_status_data():
     ELASTICSEARCH_STATUS = 'elasticsearch_status'
     FILE_ASSETS_STATUS = 'file_assets_status'
     SCFIND_STATUS = 'scfind_status'
+    SPATIALQUERY_STATUS = 'spatialquery_status'
     BRANCH = 'branch'
     COMMIT = 'commit'
     POSTGRES_CONNECTION = 'postgres_connection'
@@ -402,7 +405,8 @@ def get_status_data():
         ONTOLOGY_API: {},
         UKV_API: {},
         DATA_PRODUCTS_API: {},
-        SCFIND_API: {}
+        SCFIND_API: {},
+        SPATIALQUERY_API: {}
     }
 
     # uuid-api
@@ -568,6 +572,12 @@ def get_status_data():
     else:
         status_data[SCFIND_API][SCFIND_STATUS] = False
 
+    # SpatialQuery API
+    spatialquery_api_response = status_request(app.config["SPATIALQUERY_API_STATUS_URL"])
+    if spatialquery_api_response.status_code == 200:
+        status_data[SPATIALQUERY_API][SPATIALQUERY_STATUS] = True
+    else:
+        status_data[SPATIALQUERY_API][SPATIALQUERY_STATUS] = False
     # Final result
     return status_data
 
